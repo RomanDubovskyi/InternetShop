@@ -37,14 +37,16 @@ public class ItemDaoImpl implements ItemDao {
     public Item update(Item item) {
         for (int i = 0; i < Storage.items.size(); i++) {
             if (Storage.items.get(i).getId().equals(item.getId())) {
-                Storage.items.set(i, item);
+                Storage.items.get(i).setId(item.getId());
+                Storage.items.get(i).setName(item.getName());
+                Storage.items.get(i).setPrice(item.getPrice());
             }
         }
         return item;
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean deleteById(Long id) {
         for (int i = 0; i < Storage.items.size(); i++) {
             if (Storage.items.get(i).getId().equals(id)) {
                 Storage.items.remove(i);
@@ -56,12 +58,6 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public boolean delete(Item item) {
-        for (int i = 0; i < Storage.items.size(); i++) {
-            if (Storage.items.get(i).getId().equals(item.getId())) {
-                Storage.items.remove(i);
-                return true;
-            }
-        }
-        return false;
+      return Storage.items.remove(item);
     }
 }

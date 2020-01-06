@@ -13,7 +13,7 @@ public class BucketDaoImpl implements BucketDao {
 
     @Override
     public Bucket create(Bucket bucket) {
-        bucket.setId(bucketIdCounter);
+        bucket.setBucketId(bucketIdCounter);
         Storage.buckets.add(bucket);
         bucketIdCounter++;
         return bucket;
@@ -23,15 +23,17 @@ public class BucketDaoImpl implements BucketDao {
     public Optional<Bucket> get(Long id) {
         return Storage.buckets
                 .stream()
-                .filter(b -> b.getId().equals(id))
+                .filter(b -> b.getBucketId().equals(id))
                 .findFirst();
     }
 
     @Override
     public Bucket update(Bucket bucket) {
         for (int i = 0; i < Storage.buckets.size(); i++) {
-            if (Storage.buckets.get(i).getId().equals(bucket.getId())) {
-                Storage.buckets.set(i, bucket);
+            if (Storage.buckets.get(i).getBucketId().equals(bucket.getBucketId())) {
+                Storage.buckets.get(i).setBucketId(bucket.getBucketId());
+                Storage.buckets.get(i).setOwnerId(bucket.getOwnerID());
+                Storage.buckets.get(i).setItems(bucket.getItems());
             }
         }
         return bucket;
@@ -39,19 +41,13 @@ public class BucketDaoImpl implements BucketDao {
 
     @Override
     public boolean delete(Bucket bucket) {
-        for (int i = 0; i < Storage.buckets.size(); i++) {
-            if (Storage.buckets.get(i).getId().equals(bucket.getId())) {
-                Storage.buckets.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return Storage.buckets.remove(bucket);
     }
 
     @Override
-    public boolean delete(Long bucketId) {
+    public boolean deleteById(Long bucketId) {
         for (int i = 0; i < Storage.buckets.size(); i++) {
-            if (Storage.buckets.get(i).getId().equals(bucketId)) {
+            if (Storage.buckets.get(i).getBucketId().equals(bucketId)) {
                 Storage.buckets.remove(i);
                 return true;
             }

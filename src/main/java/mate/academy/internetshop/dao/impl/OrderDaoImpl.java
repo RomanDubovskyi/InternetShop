@@ -37,14 +37,16 @@ public class OrderDaoImpl implements OrderDao {
     public Order update(Order order) {
         for (int i = 0; i < Storage.orders.size(); i++) {
             if (Storage.orders.get(i).getOrderId().equals(order.getOrderId())) {
-                Storage.orders.set(i, order);
+                Storage.orders.get(i).setItems(order.getItems());
+                Storage.orders.get(i).setOrderId(order.getOrderId());
+                Storage.orders.get(i).setOwnerId(order.getOwnerId());
             }
         }
         return order;
     }
 
     @Override
-    public boolean delete(Long orderId) {
+    public boolean deleteById(Long orderId) {
         for (int i = 0; i < Storage.orders.size(); i++) {
             if (Storage.orders.get(i).getOrderId().equals(orderId)) {
                 Storage.orders.remove(i);
@@ -56,12 +58,6 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean delete(Order order) {
-        for (int i = 0; i < Storage.orders.size(); i++) {
-            if (Storage.orders.get(i).getOrderId().equals(order.getOrderId())) {
-                Storage.orders.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return Storage.orders.remove(order);
     }
 }

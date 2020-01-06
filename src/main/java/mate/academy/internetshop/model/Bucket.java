@@ -3,16 +3,16 @@ package mate.academy.internetshop.model;
 import java.util.List;
 
 public class Bucket {
-    private Long id;
     private List<Item> items;
     private Long bucketId;
+    private Long ownerId;
 
-    public Long getId() {
-        return id;
+    public Long getOwnerID() {
+        return ownerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOwnerId(Long id) {
+        this.ownerId = id;
     }
 
     public List<Item> getItems() {

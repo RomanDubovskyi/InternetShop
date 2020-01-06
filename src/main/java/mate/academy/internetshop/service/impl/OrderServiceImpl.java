@@ -10,6 +10,7 @@ import mate.academy.internetshop.service.OrderService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,20 +30,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order get(Long orderId) {
         return orderDao.get(orderId)
-                .orElseThrow(()->new NoSuchElementException("Order doesn't exist"));
+                .orElseThrow(() -> new NoSuchElementException("Order doesn't exist"));
     }
 
     @Override
     public Order update(Order order) {
-        if (!Storage.orders.contains(order)) {
-            throw new NoSuchElementException("Order you're trying to update, doesn't exist");
-        }
         return orderDao.update(order);
     }
 
     @Override
-    public boolean delete(Long orderId) {
-        return orderDao.delete(orderId);
+    public boolean deleteById(Long orderId) {
+        return orderDao.deleteById(orderId);
     }
 
     @Override
@@ -53,9 +51,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order completeOrder(List<Item> items, User user) {
         Order newOrder = new Order();
-        orderDao.create(newOrder);
-        newOrder.setItems(items);
-        user.getOrdersHistory().add(newOrder);
+        orderDao.create(newOrder).setItems(items);
+        newOrder.setOwnerId(user.getUserId());
         return newOrder;
     }
 
@@ -64,6 +61,9 @@ public class OrderServiceImpl implements OrderService {
         if (!Storage.users.contains(user)) {
             throw new NoSuchElementException("User you're trying to find, doesn't exist");
         }
-        return user.getOrdersHistory();
+        return Storage.orders
+                .stream()
+                .filter(o -> o.getOwnerId().equals(user.getUserId()))
+                .collect(Collectors.toList());
     }
 }

@@ -37,14 +37,14 @@ public class UserDaoImpl implements UserDao {
     public User update(User user) {
         for (int i = 0; i < Storage.users.size(); i++) {
             if (Storage.users.get(i).getUserId().equals(user.getUserId())) {
-                Storage.users.set(i, user);
+                Storage.users.get(i).setUserId(user.getUserId());
             }
         }
         return user;
     }
 
     @Override
-    public boolean delete(Long userId) {
+    public boolean deleteById(Long userId) {
         for (int i = 0; i < Storage.users.size(); i++) {
             if (Storage.users.get(i).getUserId().equals(userId)) {
                 Storage.users.remove(i);
@@ -56,12 +56,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean delete(User user) {
-        for (int i = 0; i < Storage.users.size(); i++) {
-            if (Storage.users.get(i).getUserId().equals(user.getUserId())) {
-                Storage.users.remove(i);
-                return true;
-            }
-        }
-        return false;
+        return Storage.users.remove(user);
     }
 }

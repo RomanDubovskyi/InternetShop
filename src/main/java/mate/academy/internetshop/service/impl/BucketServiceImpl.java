@@ -8,7 +8,6 @@ import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.BucketService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,9 +29,6 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public Bucket update(Bucket bucket) {
-        if (!Storage.buckets.contains(bucket)) {
-            throw new NoSuchElementException("Bucket you're trying to update, doesn't exist");
-        }
         return bucketDao.update(bucket);
     }
 
@@ -42,8 +38,8 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public boolean delete(Long bucketId) {
-        return bucketDao.delete(bucketId);
+    public boolean deleteById(Long bucketId) {
+        return bucketDao.deleteById(bucketId);
     }
 
     @Override
@@ -61,7 +57,7 @@ public class BucketServiceImpl implements BucketService {
         if (!Storage.buckets.contains(bucket)) {
           throw  new NoSuchElementException("Bucket doesn't exist");
         }
-        bucket.setItems(new ArrayList<>());
+        bucket.getItems().clear();
     }
 
     @Override
