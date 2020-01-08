@@ -37,6 +37,7 @@ public class ItemDaoImpl implements ItemDao {
     public Item update(Item item) {
         for (int i = 0; i < Storage.items.size(); i++) {
             if (Storage.items.get(i).getId().equals(item.getId())) {
+
                 Storage.items.get(i).setId(item.getId());
                 Storage.items.get(i).setName(item.getName());
                 Storage.items.get(i).setPrice(item.getPrice());
