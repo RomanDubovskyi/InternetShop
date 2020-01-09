@@ -22,6 +22,11 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
+    public List<Bucket> getAll() {
+        return bucketDao.getAll();
+    }
+
+    @Override
     public Bucket get(Long id) {
         return bucketDao.get(id)
                 .orElseThrow(() -> new NoSuchElementException("Bucket doesn't exist"));

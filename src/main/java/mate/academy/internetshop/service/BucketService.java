@@ -5,16 +5,7 @@ import mate.academy.internetshop.model.Item;
 
 import java.util.List;
 
-public interface BucketService {
-    Bucket create(Bucket bucket);
-
-    Bucket get(Long id);
-
-    Bucket update(Bucket bucket);
-
-    boolean delete(Bucket bucket);
-
-    boolean deleteById(Long bucketId);
+public interface BucketService extends GenericService<Bucket, Long> {
 
     void addItem(Bucket bucket, Item item);
 
