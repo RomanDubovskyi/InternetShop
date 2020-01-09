@@ -5,6 +5,7 @@ import mate.academy.internetshop.dao.Storage;
 import mate.academy.internetshop.library.Dao;
 import mate.academy.internetshop.model.Bucket;
 
+import java.util.List;
 import java.util.Optional;
 
 @Dao
@@ -25,6 +26,11 @@ public class BucketDaoImpl implements BucketDao {
                 .stream()
                 .filter(b -> b.getBucketId().equals(id))
                 .findFirst();
+    }
+
+    @Override
+    public List<Bucket> getAll() {
+        return Storage.buckets;
     }
 
     @Override
