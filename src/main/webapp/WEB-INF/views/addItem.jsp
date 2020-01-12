@@ -18,8 +18,14 @@
 
         <hr>
         <button type="submit">Add</button>
-        <p><button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu</button></p>
-        <p><button onclick="location.href='/internet_shop_war_exploded/servlet/getAllItems'" type="button">Items List</button></p>
+        <p>
+            <button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu
+            </button>
+        </p>
+        <p>
+            <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllItems'" type="button">Items List
+            </button>
+        </p>
     </div>
 </form>
 </body>

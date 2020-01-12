@@ -13,21 +13,27 @@
         <th>Item Price</th>
         <th>Remove From Bucket</th>
     </tr>
-    <c:forEach var="item" items="${bucket.items}" >
+    <c:forEach var="item" items="${bucket.items}">
         <tr>
             <td>
-                <c:out value="${item.name}" />
+                <c:out value="${item.name}"/>
             </td>
             <td>
-                <c:out value="${item.price}" />
+                <c:out value="${item.price}"/>
             </td>
             <td>
-                <a href="${pageContext.request.contextPath}/servlet/deleteItemFromBucket?bucket_id=${bucket.bucketId}&item_id=${item.id}"><button>Remove</button></a>
+                <a href="${pageContext.request.contextPath}/servlet/deleteItemFromBucket?bucket_id=${bucket.bucketId}&item_id=${item.id}">
+                    <button>Remove</button>
+                </a>
             </td>
         </tr>
     </c:forEach>
 </table>
-<p><a href="completeOrder?bucket_id=${bucket.bucketId}"><button>Complete Order</button></a></p>
-<p><button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu</button></p>
+<p><a href="completeOrder?bucket_id=${bucket.bucketId}">
+    <button>Complete Order</button>
+</a></p>
+<p>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu</button>
+</p>
 </body>
 </html>

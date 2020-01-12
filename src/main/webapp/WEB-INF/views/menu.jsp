@@ -10,13 +10,16 @@
 <p>
     <button onclick="location.href='/internet_shop_war_exploded/servlet/addItem'" type="button">Add Item</button>
 <p>
-    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllItems'" type="button">Show all Items</button>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllItems'" type="button">Show all Items
+    </button>
 <p>
-    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllUsers'" type="button">Show all Users</button>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllUsers'" type="button">Show all Users
+    </button>
 <p>
     <button onclick="location.href='/internet_shop_war_exploded/servlet/getBucket'" type="button">Show Bucket</button>
 <p>
-    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllOrders'" type="button">Show all Orders</button>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllOrders'" type="button">Show all Orders
+    </button>
 <p>
 </body>
 </html>
