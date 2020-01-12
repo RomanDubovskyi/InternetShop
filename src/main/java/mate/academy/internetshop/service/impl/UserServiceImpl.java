@@ -1,8 +1,8 @@
 package mate.academy.internetshop.service.impl;
 
 import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.library.Inject;
-import mate.academy.internetshop.library.Service;
+import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.annotations.Service;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
 

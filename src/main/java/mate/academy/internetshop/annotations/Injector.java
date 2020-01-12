@@ -1,4 +1,4 @@
-package mate.academy.internetshop.library;
+package mate.academy.internetshop.annotations;
 
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.ItemDao;

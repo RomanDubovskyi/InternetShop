@@ -2,7 +2,7 @@ package mate.academy.internetshop.dao.impl;
 
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.Storage;
-import mate.academy.internetshop.library.Dao;
+import mate.academy.internetshop.annotations.Dao;
 import mate.academy.internetshop.model.Bucket;
 
 import java.util.List;
@@ -59,5 +59,12 @@ public class BucketDaoImpl implements BucketDao {
             }
         }
         return false;
+    }
+
+    @Override
+    public Optional<Bucket> getByOwnerId(Long ownerId) {
+        return Storage.buckets.stream()
+                .filter(bucket1 -> bucket1.getOwnerID().equals(ownerId))
+                .findFirst();
     }
 }

@@ -1,7 +1,7 @@
 package mate.academy.internetshop;
 
-import mate.academy.internetshop.library.Inject;
-import mate.academy.internetshop.library.Injector;
+import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.annotations.Injector;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Order;

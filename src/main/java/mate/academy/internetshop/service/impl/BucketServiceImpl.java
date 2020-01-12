@@ -2,8 +2,8 @@ package mate.academy.internetshop.service.impl;
 
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.Storage;
-import mate.academy.internetshop.library.Inject;
-import mate.academy.internetshop.library.Service;
+import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.annotations.Service;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.BucketService;
@@ -68,5 +68,10 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public List<Item> getAllItems(Bucket bucket) {
         return bucket.getItems();
+    }
+
+    @Override
+    public Bucket getByOwnerId(Long ownerId) {
+        return bucketDao.getByOwnerId(ownerId).get();
     }
 }
