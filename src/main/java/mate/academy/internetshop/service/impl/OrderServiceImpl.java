@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getUserOrders(User user) {
-        return   getAll()
+        return  getAll()
                 .stream()
                 .filter(o -> o.getOwnerId().equals(user.getUserId()))
                 .collect(Collectors.toList());

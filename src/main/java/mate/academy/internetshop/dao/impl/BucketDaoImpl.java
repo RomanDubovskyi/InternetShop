@@ -64,7 +64,7 @@ public class BucketDaoImpl implements BucketDao {
     @Override
     public Optional<Bucket> getByOwnerId(Long ownerId) {
         return Storage.buckets.stream()
-                .filter(bucket1 -> bucket1.getOwnerID().equals(ownerId))
+                .filter(bucket -> bucket.getOwnerID().equals(ownerId))
                 .findFirst();
     }
 }
