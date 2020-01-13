@@ -17,10 +17,12 @@ public class DeleteItemFromBucketController extends HttpServlet {
     private static ItemService itemService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String itemId = req.getParameter("item_id");
         String bucketId = req.getParameter("bucket_id");
-        bucketService.deleteItem(bucketService.get(Long.valueOf(bucketId)), itemService.get(Long.valueOf(itemId)));
+        bucketService.deleteItem(bucketService
+                .get(Long.valueOf(bucketId)), itemService.get(Long.valueOf(itemId)));
         resp.sendRedirect(req.getContextPath() + "/servlet/getBucket");
     }
 }

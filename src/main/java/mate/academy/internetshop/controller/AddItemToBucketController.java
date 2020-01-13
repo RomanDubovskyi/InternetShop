@@ -21,7 +21,8 @@ public class AddItemToBucketController extends HttpServlet {
     private static final Long USER_ID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String itemId = req.getParameter("item_id");
         Bucket newBucket = bucketService.getByOwnerId(USER_ID);
         Item item = itemService.get(Long.valueOf(itemId));
