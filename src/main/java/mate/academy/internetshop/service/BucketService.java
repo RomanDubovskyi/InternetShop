@@ -11,6 +11,8 @@ public interface BucketService extends GenericService<Bucket, Long> {
 
     void deleteItem(Bucket bucket, Item item);
 
+    Bucket getByOwnerId(Long ownerId);
+
     void clear(Bucket bucket);
 
     List<Item> getAllItems(Bucket bucket);

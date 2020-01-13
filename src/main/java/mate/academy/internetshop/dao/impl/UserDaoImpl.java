@@ -2,7 +2,7 @@ package mate.academy.internetshop.dao.impl;
 
 import mate.academy.internetshop.dao.Storage;
 import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.library.Dao;
+import mate.academy.internetshop.annotations.Dao;
 import mate.academy.internetshop.model.User;
 
 import java.util.List;
