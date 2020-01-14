@@ -9,7 +9,7 @@
 <body>
 <h1>All Users Panel </h1>
 <p></p>
-<a href="/internet_shop_war_exploded/servlet/registration"/>
+<a href="/internet_shop_war_exploded/registration"/>
 <button>ADD USER</button>
 </a>
 <p>Users:</p>

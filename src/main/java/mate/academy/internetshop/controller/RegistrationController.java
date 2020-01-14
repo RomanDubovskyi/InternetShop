@@ -7,9 +7,7 @@ import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.UserService;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 public class RegistrationController extends HttpServlet {
@@ -33,7 +31,11 @@ public class RegistrationController extends HttpServlet {
         newUser.setName(req.getParameter("user_name"));
         newUser.setPassword(req.getParameter("psw"));
         newUser.setSurname(req.getParameter("user_surname"));
-        userService.create(newUser);
+        User user = userService.create(newUser);
+        HttpSession session = req.getSession(true);
+        session.setAttribute("user_id", user.getUserId());
+        Cookie cookie = new Cookie("MATE", user.getToken());
+        resp.addCookie(cookie);
         Bucket bucket = new Bucket();
         bucket.setOwnerId(newUser.getUserId());
         bucketService.create(bucket);

@@ -3,6 +3,7 @@ package mate.academy.internetshop.dao.impl;
 import mate.academy.internetshop.dao.Storage;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.model.User;
 
 import java.util.List;
@@ -57,5 +58,19 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean delete(User user) {
         return Storage.users.remove(user);
+    }
+
+    @Override
+    public Optional<User> findByLogin(String login, String password) {
+        return Storage.users.stream()
+                .filter(o -> o.getLogin().equals(login))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<User> findByToken(String token) {
+        return Storage.users.stream()
+                .filter(user -> user.getToken().equals(token))
+                .findFirst();
     }
 }
