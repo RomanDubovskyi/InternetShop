@@ -22,14 +22,15 @@ import java.util.List;
 
 public class Injector {
     private static final String PROJECT_MAIN_PACKAGE = "mate.academy.internetshop";
-    final static Logger LOGGER = Logger.getLogger(InjectInitializer.class);
+    private static final Logger LOGGER = Logger.getLogger(InjectInitializer.class);
     private static List<Class> classes = new ArrayList<>();
 
     static {
         try {
             classes.addAll(getClasses(PROJECT_MAIN_PACKAGE));
         } catch (ClassNotFoundException | IOException e) {
-            LOGGER.error(e);
+            LOGGER.error("Couldn't get all classes!", e);
+            throw new RuntimeException(e);
         }
     }
 
