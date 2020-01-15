@@ -9,6 +9,7 @@ import mate.academy.internetshop.service.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,13 +57,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String login, String password)
             throws AuthenticationException {
-       return userDao.findByLogin(login, password).orElseThrow(() ->
-               new AuthenticationException("Login or password is incorrect!"));
+       Optional<User> user = userDao.findByLogin(login);
+       if (user.isEmpty() || !user.get().getPassword().equals(password)) {
+           throw new AuthenticationException("Login or password is incorrect!");
+       }
+       return user.get();
     }
 
     @Override
-    public User getByToken(String token) throws AuthenticationException {
-        return userDao.findByToken(token).orElseThrow(()
-                -> new AuthenticationException("Password or Login is incorrect"));
+    public Optional<User> getByToken(String token) {
+        return userDao.findByToken(token);
     }
 }

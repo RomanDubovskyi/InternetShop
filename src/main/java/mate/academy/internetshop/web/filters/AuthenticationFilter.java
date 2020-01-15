@@ -1,7 +1,6 @@
 package mate.academy.internetshop.web.filters;
 
 import mate.academy.internetshop.annotations.Inject;
-import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
@@ -16,6 +15,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class AuthenticationFilter implements Filter {
@@ -39,17 +39,16 @@ public class AuthenticationFilter implements Filter {
         }
         for (Cookie cookie : req.getCookies()) {
             if (cookie.getName().equals("MATE")) {
-                try {
-                    User user = userService.getByToken(cookie.getValue());
-                    LOGGER.info("User " + user.getLogin() + " was authenticated.");
+                Optional<User> user = userService.getByToken(cookie.getValue());
+                if (user.isPresent()) {
+                    LOGGER.info("User " + user.get().getLogin() + " was authenticated.");
                     chain.doFilter(servletRequest, servletResponse);
                     return;
-                } catch (AuthenticationException e) {
-                    LOGGER.info("User was't authenticated.");
-                    processUnAuthenticated(req, resp);
                 }
             }
         }
+        LOGGER.info("User was't authenticated.");
+        processUnAuthenticated(req, resp);
     }
 
     private void processUnAuthenticated(HttpServletRequest req, HttpServletResponse resp)
