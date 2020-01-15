@@ -6,7 +6,12 @@ import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 public class LoginController extends HttpServlet {
@@ -32,12 +37,8 @@ public class LoginController extends HttpServlet {
             resp.addCookie(cookie);
             resp.sendRedirect(req.getContextPath() + "/servlet/main_menu");
         } catch (AuthenticationException e) {
-            e.printStackTrace();
             req.setAttribute("error_massage", "Incorrect login or password!");
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
         }
-
     }
-
-
 }
