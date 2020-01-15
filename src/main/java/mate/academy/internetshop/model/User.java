@@ -7,6 +7,7 @@ public class User {
     private String surname;
     private String login;
     private String password;
+    private String token;
 
     public User(String name) {
         this.name = name;
@@ -14,6 +15,14 @@ public class User {
 
     public User(){
 
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getName() {
