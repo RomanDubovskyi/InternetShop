@@ -14,7 +14,7 @@ public class LogoutController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         HttpSession session = req.getSession(true);
-        session.removeAttribute("user_id");
+        session.invalidate();
         for (Cookie cookie : req.getCookies()) {
             if (cookie.getName().equals("MATE")) {
                 cookie.setMaxAge(0);
