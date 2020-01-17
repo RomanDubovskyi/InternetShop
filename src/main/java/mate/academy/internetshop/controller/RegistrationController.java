@@ -43,6 +43,6 @@ public class RegistrationController extends HttpServlet {
         Bucket bucket = new Bucket();
         bucket.setOwnerId(newUser.getUserId());
         bucketService.create(bucket);
-        resp.sendRedirect(req.getContextPath() + "/servlet/getAllUsers");
+        resp.sendRedirect(req.getContextPath() + "/servlet/main_menu");
     }
 }
