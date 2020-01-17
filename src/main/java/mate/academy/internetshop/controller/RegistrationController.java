@@ -2,6 +2,7 @@ package mate.academy.internetshop.controller;
 
 import mate.academy.internetshop.annotations.Inject;
 import mate.academy.internetshop.model.Bucket;
+import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.UserService;
@@ -35,6 +36,7 @@ public class RegistrationController extends HttpServlet {
         newUser.setName(req.getParameter("user_name"));
         newUser.setPassword(req.getParameter("psw"));
         newUser.setSurname(req.getParameter("user_surname"));
+        newUser.addRole(Role.of("USER"));
         User user = userService.create(newUser);
         HttpSession session = req.getSession(true);
         session.setAttribute("user_id", user.getUserId());
