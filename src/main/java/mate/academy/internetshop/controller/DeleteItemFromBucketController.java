@@ -1,6 +1,7 @@
 package mate.academy.internetshop.controller;
 
 import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 
@@ -19,10 +20,10 @@ public class DeleteItemFromBucketController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        Long userId = (Long) req.getSession().getAttribute("user_id");
+        Bucket bucket = bucketService.getByOwnerId(userId);
         String itemId = req.getParameter("item_id");
-        String bucketId = req.getParameter("bucket_id");
-        bucketService.deleteItem(bucketService
-                .get(Long.valueOf(bucketId)), itemService.get(Long.valueOf(itemId)));
+        bucketService.deleteItem(bucket, itemService.get(Long.valueOf(itemId)));
         resp.sendRedirect(req.getContextPath() + "/servlet/getBucket");
     }
 }
