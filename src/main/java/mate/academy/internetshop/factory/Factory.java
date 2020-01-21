@@ -8,6 +8,7 @@ import mate.academy.internetshop.dao.impl.BucketDaoImpl;
 import mate.academy.internetshop.dao.impl.ItemDaoImpl;
 import mate.academy.internetshop.dao.impl.OrderDaoImpl;
 import mate.academy.internetshop.dao.impl.UserDaoImpl;
+import mate.academy.internetshop.dao.jdbc.ItemDaoJdbcImpl;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -16,8 +17,26 @@ import mate.academy.internetshop.service.impl.BucketServiceImpl;
 import mate.academy.internetshop.service.impl.ItemServiceImpl;
 import mate.academy.internetshop.service.impl.OrderServiceImpl;
 import mate.academy.internetshop.service.impl.UserServiceImpl;
+import org.apache.log4j.Logger;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Factory {
+    private static Logger logger = Logger.getLogger(Factory.class);
+    private static Connection connection;
+
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/internetshop?"
+                    + "user=root&password=roman&serverTimezone=UTC");
+        } catch (ClassNotFoundException | SQLException e) {
+            logger.error("Can't establish connection to our DB", e);
+        }
+    }
+
     private static BucketDao bucketDao;
     private static ItemDao itemDao;
     private static OrderDao orderDao;
@@ -26,6 +45,7 @@ public class Factory {
     private static ItemService itemService;
     private static OrderService orderService;
     private static UserService userService;
+    private static ItemDao itemDaoJdbc;
 
     public static BucketDao getBucketDao() {
         if (bucketDao == null) {
@@ -35,10 +55,10 @@ public class Factory {
     }
 
     public static ItemDao getItemDao() {
-        if (itemDao == null) {
-            itemDao = new ItemDaoImpl();
+        if (itemDaoJdbc == null) {
+            itemDaoJdbc = new ItemDaoJdbcImpl(connection);
         }
-        return itemDao;
+        return itemDaoJdbc;
     }
 
     public static OrderDao getOrderDao() {
