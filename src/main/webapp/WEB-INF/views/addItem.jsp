@@ -14,7 +14,7 @@
         <input type="text" placeholder="Enter Item name" name="item_name" required>
 
         <label for="price"><b>Price</b></label>
-        <input type="number" placeholder="Enter Price" name="price" required>
+        <input type="text" placeholder="Enter Price" name="price" required>
 
         <hr>
         <button type="submit">Add</button>

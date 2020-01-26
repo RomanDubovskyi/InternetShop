@@ -1,5 +1,6 @@
 package mate.academy.internetshop.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,6 +8,15 @@ public class Order {
     private Long orderId;
     private Long ownerId;
     private List<Item> purchasedItems;
+
+    public Order(Long orderId) {
+        this.orderId = orderId;
+        purchasedItems = new ArrayList<>();
+    }
+
+    public Order() {
+        purchasedItems = new ArrayList<>();
+    }
 
     public Long getOwnerId() {
         return ownerId;

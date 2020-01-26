@@ -8,7 +8,10 @@ import mate.academy.internetshop.dao.impl.BucketDaoImpl;
 import mate.academy.internetshop.dao.impl.ItemDaoImpl;
 import mate.academy.internetshop.dao.impl.OrderDaoImpl;
 import mate.academy.internetshop.dao.impl.UserDaoImpl;
+import mate.academy.internetshop.dao.jdbc.BucketDaoJdbcImpl;
 import mate.academy.internetshop.dao.jdbc.ItemDaoJdbcImpl;
+import mate.academy.internetshop.dao.jdbc.OrderDaoJdbcImpl;
+import mate.academy.internetshop.dao.jdbc.UserDaoJdbcImpl;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -46,12 +49,15 @@ public class Factory {
     private static OrderService orderService;
     private static UserService userService;
     private static ItemDao itemDaoJdbc;
+    private static BucketDao bucketDaoJdbc;
+    private static UserDao userDaoJdbc;
+    private static OrderDao orderDaoJdbc;
 
     public static BucketDao getBucketDao() {
-        if (bucketDao == null) {
-            bucketDao = new BucketDaoImpl();
+        if (bucketDaoJdbc == null) {
+            bucketDaoJdbc = new BucketDaoJdbcImpl(connection);
         }
-        return bucketDao;
+        return bucketDaoJdbc;
     }
 
     public static ItemDao getItemDao() {
@@ -62,17 +68,17 @@ public class Factory {
     }
 
     public static OrderDao getOrderDao() {
-        if (orderDao == null) {
-            orderDao = new OrderDaoImpl();
+        if (orderDaoJdbc == null) {
+            orderDaoJdbc = new OrderDaoJdbcImpl(connection);
         }
-        return orderDao;
+        return orderDaoJdbc;
     }
 
     public static UserDao getUserDao() {
-        if (userDao == null) {
-            userDao = new UserDaoImpl();
+        if (userDaoJdbc == null) {
+            userDaoJdbc = new UserDaoJdbcImpl(connection);
         }
-        return userDao;
+        return userDaoJdbc;
     }
 
     public static BucketService getBucketService() {
