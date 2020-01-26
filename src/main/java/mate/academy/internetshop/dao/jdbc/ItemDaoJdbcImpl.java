@@ -30,7 +30,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
         Double price = item.getPrice();
         String query = String.format(Locale.ROOT, "insert into %s (name, price) values (?, ?);",
                 TABLE_ITEMS);
-        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(query,
+                Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, itemName);
             statement.setDouble(2, price);
             statement.executeUpdate();
@@ -90,11 +91,12 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
         Long id = item.getId();
         String name = item.getName();
         Double price = item.getPrice();
-        String query = String.format("update %s set name =?, price =? where item_id =?;", TABLE_ITEMS);
+        String query = String.format("update %s set name =?, price =? where item_id =?;",
+                TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
             statement.setDouble(2, price);
-            statement.setLong(3,  id);
+            statement.setLong(3, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.warn("Item couldn't be update", e);

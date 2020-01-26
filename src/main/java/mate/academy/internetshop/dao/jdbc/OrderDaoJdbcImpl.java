@@ -126,7 +126,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
         String getItemsQuery = String.format(
                 "select * from %s join %s on orders.order_id = orders_items.order_id join %s on" +
                         " orders_items.item_id = items.item_id where orders.order_id = ?;",
-            TABLE_ORDERS, TABLE_ORDERS_ITEMS, TABLE_ITEMS);
+                TABLE_ORDERS, TABLE_ORDERS_ITEMS, TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(getItemsQuery)) {
             statement.setLong(1, order.getOrderId());
             ResultSet rs = statement.executeQuery();
