@@ -50,19 +50,19 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public void addItem(Bucket bucket, Item item) {
         bucket.getItems().add(item);
+        update(bucket);
     }
 
     @Override
     public void deleteItem(Bucket bucket, Item item) {
         bucket.getItems().remove(item);
+        update(bucket);
     }
 
     @Override
     public void clear(Bucket bucket) {
-        if (!Storage.buckets.contains(bucket)) {
-          throw  new NoSuchElementException("Bucket doesn't exist");
-        }
         bucket.getItems().clear();
+        update(bucket);
     }
 
     @Override

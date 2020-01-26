@@ -33,19 +33,10 @@ public class AuthenticationFilter implements Filter {
                          FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        if (req.getCookies() == null) {
-            processUnAuthenticated(req, resp);
+        Long userId = (Long) req.getSession().getAttribute("user_id");
+        if (userId != null) {
+            chain.doFilter(req, resp);
             return;
-        }
-        for (Cookie cookie : req.getCookies()) {
-            if (cookie.getName().equals("MATE")) {
-                Optional<User> user = userService.getByToken(cookie.getValue());
-                if (user.isPresent()) {
-                    LOGGER.info("User " + user.get().getLogin() + " was authenticated.");
-                    chain.doFilter(servletRequest, servletResponse);
-                    return;
-                }
-            }
         }
         LOGGER.info("User was't authenticated.");
         processUnAuthenticated(req, resp);

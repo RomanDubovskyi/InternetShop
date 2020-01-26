@@ -15,6 +15,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Add to Bucket</th>
+        <th>Remove from items</th>
     </tr>
     <c:forEach var="item" items="${items}">
         <tr>
@@ -30,6 +31,11 @@
             <td>
                 <a href="/internet_shop_war_exploded/servlet/addItemToBucket?item_id=${item.id}"/>
                 <button>Add to Bucket</button>
+                </a>
+            </td>
+            <td>
+                <a href="/internet_shop_war_exploded/servlet/deleteFromItems?item_id=${item.id}"/>
+                <button>   Remove   </button>
                 </a>
             </td>
         </tr>
