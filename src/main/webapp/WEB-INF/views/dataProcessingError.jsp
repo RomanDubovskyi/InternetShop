@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Access denied</title>
+    <title>Error</title>
 </head>
 <body>
-<h1>You don't have permission to access requested page!</h1>
+<h1>Error!</h1>
+<div>${error_massage}</div>
 </body>
 </html>

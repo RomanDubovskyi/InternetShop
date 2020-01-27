@@ -124,6 +124,14 @@
         <servlet-name>injectData</servlet-name>
         <url-pattern>/injectData</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteFromItems</servlet-name>
+        <servlet-class>mate.academy.internetshop.controller.DeleteFromItemsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteFromItems</servlet-name>
+        <url-pattern>/servlet/deleteFromItems</url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>auth-filter</filter-name>

@@ -21,5 +21,8 @@
     <button onclick="location.href='/internet_shop_war_exploded/servlet/getAllOrders'" type="button">Show all Orders
     </button>
 <p>
+<p>
+    <button onclick="location.href='/internet_shop_war_exploded/logout'" type="button">Log Out</button>
+<p>
 </body>
 </html>

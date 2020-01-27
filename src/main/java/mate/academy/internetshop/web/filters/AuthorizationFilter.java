@@ -30,7 +30,7 @@ public class AuthorizationFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         protectedUrlsAdmin.put("/servlet/getAllUsers", ADMIN);
         protectedUrlsAdmin.put("/servlet/addItem", ADMIN);
-        protectedUrlsAdmin.put("/servlet/deleteItem", ADMIN);
+        protectedUrlsAdmin.put("/servlet/deleteFromItems", ADMIN);
 
         protectedUrlsUser.put("/servlet/addItemToBucket", USER);
         protectedUrlsUser.put("/servlet/deleteItemFromBucket", USER);
@@ -49,6 +49,7 @@ public class AuthorizationFilter implements Filter {
         Role.RoleName roleNameUser = protectedUrlsUser.get(requestedUrl);
         if (roleNameUser == null && roleNameAdmin == null) {
             processAuthorized(chain, req, resp);
+            return;
         }
         Long userId = (Long) req.getSession().getAttribute("user_id");
         User user = userService.get(userId);

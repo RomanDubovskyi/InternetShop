@@ -1,11 +1,13 @@
 package mate.academy.internetshop.controller;
 
 import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class RegistrationController extends HttpServlet {
-
+    private static Logger logger = Logger.getLogger(AddItemController.class);
     @Inject
     private static UserService userService;
     @Inject
@@ -37,14 +39,21 @@ public class RegistrationController extends HttpServlet {
         newUser.setPassword(req.getParameter("psw"));
         newUser.setSurname(req.getParameter("user_surname"));
         newUser.addRole(Role.of("USER"));
-        User user = userService.create(newUser);
-        HttpSession session = req.getSession(true);
-        session.setAttribute("user_id", user.getUserId());
-        Cookie cookie = new Cookie("MATE", user.getToken());
-        resp.addCookie(cookie);
-        Bucket bucket = new Bucket();
-        bucket.setOwnerId(newUser.getUserId());
-        bucketService.create(bucket);
+        User user = null;
+        try {
+            user = userService.create(newUser);
+            HttpSession session = req.getSession(true);
+            session.setAttribute("user_id", user.getUserId());
+            Cookie cookie = new Cookie("MATE", user.getToken());
+            resp.addCookie(cookie);
+            Bucket bucket = new Bucket();
+            bucket.setOwnerId(newUser.getUserId());
+            bucketService.create(bucket);
+        } catch (DataProcessingException e) {
+            logger.error(e);
+            req.setAttribute("error_massage", e);
+            req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
+        }
         resp.sendRedirect(req.getContextPath() + "/servlet/main_menu");
     }
 }
