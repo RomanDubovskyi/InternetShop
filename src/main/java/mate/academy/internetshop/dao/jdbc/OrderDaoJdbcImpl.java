@@ -140,7 +140,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
             }
             return Optional.of(order);
         } catch (SQLException e) {
-            logger.error("Can't find order with id" , e);
+            logger.error("Can't find order with id", e);
         }
         return Optional.empty();
     }
