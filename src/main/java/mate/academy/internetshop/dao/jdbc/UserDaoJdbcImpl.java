@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public User create(User user) {
         String query = String.format(
-                "insert into %s (name, surname, login, password, token) values(?, ?, ?, ?, ?);",
+                "INSERT INTO %s (name, surname, login, password, token) VALUES(?, ?, ?, ?, ?);",
                 TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(
                 query, Statement.RETURN_GENERATED_KEYS)) {
@@ -44,10 +45,10 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 user.setUserId(rs.getLong(1));
             }
         } catch (SQLException e) {
-            logger.warn("Can't create user", e);
+            logger.error("Can't create user", e);
         }
         String setRoleQuery = String.format(
-                "insert into %s (user_id, role_id) values(" +
+                "INSERT INTO %s (user_id, role_id) VALUES(" +
                         "?, (SELECT role_id FROM %s WHERE role_name = ?))",
                 TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(setRoleQuery)) {
@@ -55,7 +56,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             statement.setString(2, "USER");
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Can't set Role", e);
+            logger.error("Can't set Role", e);
         }
         return user;
     }
@@ -65,25 +66,30 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         user.setUserId(id);
         String query = String.format(
-                "select * from %s join %s on users.user_id = users_roles.user_id join %s" +
-                        " on users_roles.role_id = roles.role_id where users.user_id =?",
+                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s" +
+                        " ON users_roles.role_id = roles.role_id WHERE users.user_id =?",
                 TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, user.getUserId());
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                user.setName(rs.getString("name"));
-                user.setSurname(rs.getString("surname"));
-                user.setLogin(rs.getString("login"));
-                user.setPassword(rs.getString("password"));
-                user.setToken(rs.getString("token"));
-                user.addRole(Role.of(rs.getString("role_name")));
+                setUsersFields(rs, user);
+                return Optional.of(user);
             }
-            return Optional.of(user);
         } catch (SQLException e) {
-            logger.warn("Can't get user", e);
+            logger.error("Can't get user", e);
         }
         return Optional.empty();
+    }
+
+    private void setUsersFields(ResultSet rs, User user) throws SQLException {
+        user.setUserId(rs.getLong("user_id"));
+        user.setName(rs.getString("name"));
+        user.setSurname(rs.getString("surname"));
+        user.setLogin(rs.getString("login"));
+        user.setPassword(rs.getString("password"));
+        user.setToken(rs.getString("token"));
+        user.addRole(Role.of(rs.getString("role_name")));
     }
 
     @Override
@@ -91,23 +97,18 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         user.setLogin(login);
         String query = String.format(
-                "select * from %s join %s on users.user_id = users_roles.user_id join %s " +
-                        "on users_roles.role_id = roles.role_id where login =?",
+                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s " +
+                        "ON users_roles.role_id = roles.role_id WHERE login =?",
                 TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                user.setName(rs.getString("name"));
-                user.setSurname(rs.getString("surname"));
-                user.setUserId(rs.getLong("user_id"));
-                user.setPassword(rs.getString("password"));
-                user.setToken(rs.getString("token"));
-                user.addRole(Role.of(rs.getString("role_name")));
+                setUsersFields(rs, user);
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.warn("Can't get user with login " + login);
+            logger.error("Can't get user with login ", e);
         }
         return Optional.empty();
     }
@@ -117,22 +118,18 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         user.setToken(token);
         String query = String.format(
-                "select * from %s join %s on users.user_id = users_roles.user_id join %s on users_roles.role_id = roles.role_id where token =?;",
+                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s"
+                        + " ON users_roles.role_id = roles.role_id WHERE token =?;",
                 TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                user.setName(rs.getString("name"));
-                user.setSurname(rs.getString("surname"));
-                user.setUserId(rs.getLong("user_id"));
-                user.setPassword(rs.getString("password"));
-                user.setLogin(rs.getString("login"));
-                user.addRole(Role.of(rs.getString("role_name")));
+                setUsersFields(rs, user);
+                return Optional.of(user);
             }
-            return Optional.of(user);
         } catch (SQLException e) {
-            logger.warn("Can't get user with token " + token);
+            logger.error("Can't get user with token ", e);
         }
         return Optional.empty();
     }
@@ -141,30 +138,25 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String query = String.format(
-                "select user_id, name, surname, login, password, token from %s;", TABLE_USERS);
+                "SELECT * FROM %s;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 User user = new User();
-                user.setUserId(rs.getLong(1));
-                user.setName(rs.getString(2));
-                user.setSurname(rs.getString(3));
-                user.setLogin(rs.getString(4));
-                user.setPassword(rs.getString(5));
-                user.setToken(rs.getString(6));
+                setUsersFields(rs, user);
                 users.add(user);
             }
             return users;
         } catch (SQLException e) {
-            logger.warn("Can't get all users", e);
+            logger.error("Can't get all users", e);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public User update(User user) {
-        String query = String.format("update %s set name =?, surname =?," +
-                " login =?, password =?, token =? where user_id =?;", TABLE_USERS);
+        String query = String.format("UPDATE %s SET name =?, surname =?," +
+                " login =?, password =?, token =? WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());
@@ -175,7 +167,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             statement.executeUpdate();
             return user;
         } catch (SQLException e) {
-            logger.warn("Can't update user with id " + user.getUserId());
+            logger.warn("Can't update user with id ", e);
         }
         return null;
     }
@@ -187,7 +179,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public boolean delete(User user) {
-        String query = String.format("delete from %s where user_id =?;", TABLE_USERS);
+        String query = String.format("DELETE FROM %s WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, user.getUserId());
             statement.executeUpdate();

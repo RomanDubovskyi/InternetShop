@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order create(Order order) {
-        String query = String.format("insert into %s (user_id) values (?)", TABLE_ORDERS);
+        String query = String.format("INSERT INTO %s (user_id) VALUES (?)", TABLE_ORDERS);
         try (PreparedStatement statement = connection.prepareStatement(
                 query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, order.getOwnerId());
@@ -38,7 +39,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
                 order.setOrderId(rs.getLong(1));
             }
         } catch (SQLException e) {
-            logger.warn("Can't create order", e);
+            logger.error("Can't create order", e);
         }
         return insertToOrderItems(order);
     }
@@ -48,7 +49,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
         Order order = new Order();
         order.setOrderId(id);
         String getUserIdQuery = String.format(
-                "select user_id from %s where order_id = ?;", TABLE_ORDERS);
+                "SELECT user_id FROM %s WHERE order_id = ?;", TABLE_ORDERS);
         try (PreparedStatement statement = connection.prepareStatement(getUserIdQuery)) {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
@@ -56,7 +57,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
                 order.setOwnerId(rs.getLong("user_id"));
             }
         } catch (SQLException e) {
-            logger.warn("Can't find order with id" + id);
+            logger.error("Can't find order with id", e);
         }
         return getOrderItems(order);
     }
@@ -64,7 +65,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAll() {
         List<Order> orders = new ArrayList<>();
-        String getOrderQuery = String.format("select order_id from %s;", TABLE_ORDERS);
+        String getOrderQuery = String.format("SELECT order_id FROM %s;", TABLE_ORDERS);
         try (PreparedStatement statement = connection.prepareStatement(getOrderQuery)) {
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -73,9 +74,9 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
             }
             return orders;
         } catch (SQLException e) {
-            logger.warn("Can't get all Orders", e);
+            logger.error("Can't get all Orders", e);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -96,12 +97,12 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public boolean delete(Order order) {
         String deleteOrderQuery = String.format(
-                "delete from %s where order_id =?", TABLE_ORDERS);
+                "DELETE FROM %s WHERE order_id =?", TABLE_ORDERS);
         try (PreparedStatement statement = connection.prepareStatement(deleteOrderQuery)) {
             statement.setLong(1, order.getOrderId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Can't delete order", e);
+            logger.error("Can't delete order", e);
             return false;
         }
         return deleteOrderItems(order);
@@ -109,14 +110,14 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     private Order insertToOrderItems(Order order) {
         String ItemsToOrderQuery = String.format(
-                "insert into %s (item_id, order_id) values (?, ?);", TABLE_ORDERS_ITEMS);
+                "INSERT INTO %s (item_id, order_id) VALUES (?, ?);", TABLE_ORDERS_ITEMS);
         for (Item item : order.getItems()) {
             try (PreparedStatement statement = connection.prepareStatement(ItemsToOrderQuery)) {
                 statement.setLong(1, item.getId());
                 statement.setLong(2, order.getOrderId());
                 statement.executeUpdate();
             } catch (SQLException e) {
-                logger.warn("Can't create order", e);
+                logger.error("Can't create order", e);
             }
         }
         return order;
@@ -124,8 +125,8 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     private Optional<Order> getOrderItems(Order order) {
         String getItemsQuery = String.format(
-                "select * from %s join %s on orders.order_id = orders_items.order_id join %s on" +
-                        " orders_items.item_id = items.item_id where orders.order_id = ?;",
+                "SELECT * FROM %s JOIN %s ON orders.order_id = orders_items.order_id join %s ON" +
+                        " orders_items.item_id = items.item_id WHERE orders.order_id = ?;",
                 TABLE_ORDERS, TABLE_ORDERS_ITEMS, TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(getItemsQuery)) {
             statement.setLong(1, order.getOrderId());
@@ -139,19 +140,19 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
             }
             return Optional.of(order);
         } catch (SQLException e) {
-            logger.warn("Can't find order with id" + order.getOrderId());
+            logger.error("Can't find order with id" , e);
         }
         return Optional.empty();
     }
 
     private Boolean deleteOrderItems(Order order) {
         String deleteOrderItems = String.format(
-                "delete from %s where order_id =?;", TABLE_ORDERS_ITEMS);
+                "DELETE FROM %s WHERE order_id =?;", TABLE_ORDERS_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(deleteOrderItems)) {
             statement.setLong(1, order.getOrderId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Can't update order", e);
+            logger.error("Can't update order", e);
             return false;
         }
         return true;

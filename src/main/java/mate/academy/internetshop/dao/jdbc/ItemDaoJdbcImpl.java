@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     public Item create(Item item) {
         String itemName = item.getName();
         Double price = item.getPrice();
-        String query = String.format(Locale.ROOT, "insert into %s (name, price) values (?, ?);",
+        String query = String.format(Locale.ROOT, "INSERT INTO %s (name, price) VALUES (?, ?);",
                 TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query,
                 Statement.RETURN_GENERATED_KEYS)) {
@@ -47,7 +48,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
 
     @Override
     public Optional<Item> get(Long id) {
-        String query = String.format("select * from %s where item_id =?;", TABLE_ITEMS);
+        String query = String.format("SELECT * FROM %s WHERE item_id =?;", TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
@@ -62,14 +63,14 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 return Optional.of(newItem);
             }
         } catch (SQLException e) {
-            logger.warn("Can't get item by id " + id);
+            logger.error("Can't get item by id ", e);
         }
         return Optional.empty();
     }
 
     @Override
     public List<Item> getAll() {
-        String query = String.format("select * from %s;", TABLE_ITEMS);
+        String query = String.format("SELECT * FROM %s;", TABLE_ITEMS);
         List<Item> itemList = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query);) {
             ResultSet rs = statement.executeQuery();
@@ -80,10 +81,11 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 item.setId(rs.getLong("item_id"));
                 itemList.add(item);
             }
+            return itemList;
         } catch (SQLException e) {
-            logger.warn("Can't get items", e);
+            logger.error("Can't get items", e);
         }
-        return itemList;
+        return Collections.emptyList();
     }
 
     @Override
@@ -91,7 +93,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
         Long id = item.getId();
         String name = item.getName();
         Double price = item.getPrice();
-        String query = String.format("update %s set name =?, price =? where item_id =?;",
+        String query = String.format("UPDATE %s SET name =?, price =? WHERE item_id =?;",
                 TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, name);
@@ -99,32 +101,24 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             statement.setLong(3, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Item couldn't be update", e);
+            logger.error("Item couldn't be update", e);
         }
         return item;
     }
 
     @Override
     public boolean deleteById(Long id) {
-        String query = String.format("delete from %s where item_id = ?", TABLE_ITEMS);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.warn("Can't delete item with id " + id);
-            return false;
-        }
-        return true;
+        return delete(get(id).get());
     }
 
     @Override
     public boolean delete(Item item) {
-        String query = String.format("delete from %s where item_id =?;", TABLE_ITEMS);
+        String query = String.format("DELETE FROM %s WHERE item_id =?;", TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, item.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Can't delete item with id " + item.getId());
+            logger.error("Can't delete item with id ", e);
             return false;
         }
         return true;
