@@ -2,8 +2,8 @@ package mate.academy.internetshop.dao.jdbc;
 
 import mate.academy.internetshop.annotations.Dao;
 import mate.academy.internetshop.dao.ItemDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Item;
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,14 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
-    private static Logger logger = Logger.getLogger(ItemDaoJdbcImpl.class);
     private static final String TABLE_ITEMS = "items";
 
     public ItemDaoJdbcImpl(Connection connection) {
@@ -26,7 +24,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     @Override
-    public Item create(Item item) {
+    public Item create(Item item) throws DataProcessingException {
         String itemName = item.getName();
         Double price = item.getPrice();
         String query = String.format(Locale.ROOT, "INSERT INTO %s (name, price) VALUES (?, ?);",
@@ -41,13 +39,13 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 item.setId(rs.getLong(1));
             }
         } catch (SQLException e) {
-            logger.error("Item can't be added", e);
+            throw new DataProcessingException("Can't create item " + e);
         }
         return item;
     }
 
     @Override
-    public Optional<Item> get(Long id) {
+    public Optional<Item> get(Long id) throws DataProcessingException {
         String query = String.format("SELECT * FROM %s WHERE item_id =?;", TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
@@ -63,13 +61,13 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 return Optional.of(newItem);
             }
         } catch (SQLException e) {
-            logger.error("Can't get item by id ", e);
+            throw new DataProcessingException("Can't get item " + e);
         }
         return Optional.empty();
     }
 
     @Override
-    public List<Item> getAll() {
+    public List<Item> getAll() throws DataProcessingException {
         String query = String.format("SELECT * FROM %s;", TABLE_ITEMS);
         List<Item> itemList = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(query);) {
@@ -83,13 +81,12 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             }
             return itemList;
         } catch (SQLException e) {
-            logger.error("Can't get items", e);
+            throw new DataProcessingException("Can't get all items " + e);
         }
-        return Collections.emptyList();
     }
 
     @Override
-    public Item update(Item item) {
+    public Item update(Item item) throws DataProcessingException {
         Long id = item.getId();
         String name = item.getName();
         Double price = item.getPrice();
@@ -101,25 +98,24 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
             statement.setLong(3, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Item couldn't be update", e);
+            throw new DataProcessingException("Can't update item " + e);
         }
         return item;
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws DataProcessingException {
         return delete(get(id).get());
     }
 
     @Override
-    public boolean delete(Item item) {
+    public boolean delete(Item item) throws DataProcessingException {
         String query = String.format("DELETE FROM %s WHERE item_id =?;", TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, item.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Can't delete item with id ", e);
-            return false;
+            throw new DataProcessingException("Can't delete item " + e);
         }
         return true;
     }

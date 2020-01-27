@@ -2,9 +2,9 @@ package mate.academy.internetshop.dao.jdbc;
 
 import mate.academy.internetshop.annotations.Dao;
 import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +20,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     private static final String TABLE_USERS = "users";
     private static final String TABLE_USERS_ROLES = "users_roles";
     private static final String TABLE_ROLES = "roles";
-    private static Logger logger = Logger.getLogger(UserDaoJdbcImpl.class);
 
     public UserDaoJdbcImpl(Connection connection) {
         super(connection);
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws DataProcessingException {
         String query = String.format(
                 "INSERT INTO %s (name, surname, login, password, token) VALUES(?, ?, ?, ?, ?);",
                 TABLE_USERS);
@@ -45,7 +43,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 user.setUserId(rs.getLong(1));
             }
         } catch (SQLException e) {
-            logger.error("Can't create user", e);
+            throw new DataProcessingException("Can't create user " + e);
         }
         String setRoleQuery = String.format(
                 "INSERT INTO %s (user_id, role_id) VALUES(" +
@@ -56,13 +54,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             statement.setString(2, "USER");
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("Can't set Role", e);
+            throw new DataProcessingException("Can't set role " + e);
         }
         return user;
     }
 
     @Override
-    public Optional<User> get(Long id) {
+    public Optional<User> get(Long id) throws DataProcessingException {
         User user = new User();
         user.setUserId(id);
         String query = String.format(
@@ -77,7 +75,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.error("Can't get user", e);
+            throw new DataProcessingException("Can't get role " + e);
         }
         return Optional.empty();
     }
@@ -93,7 +91,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) {
+    public Optional<User> findByLogin(String login) throws DataProcessingException {
         User user = new User();
         user.setLogin(login);
         String query = String.format(
@@ -108,13 +106,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.error("Can't get user with login ", e);
+            throw new DataProcessingException("Can't find user by login " + e);
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<User> findByToken(String token) {
+    public Optional<User> findByToken(String token) throws DataProcessingException {
         User user = new User();
         user.setToken(token);
         String query = String.format(
@@ -129,13 +127,13 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                 return Optional.of(user);
             }
         } catch (SQLException e) {
-            logger.error("Can't get user with token ", e);
+            throw new DataProcessingException("Can't find user by token " + e);
         }
         return Optional.empty();
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws DataProcessingException {
         List<User> users = new ArrayList<>();
         String query = String.format(
                 "SELECT * FROM %s;", TABLE_USERS);
@@ -148,13 +146,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             }
             return users;
         } catch (SQLException e) {
-            logger.error("Can't get all users", e);
+            throw new DataProcessingException("Can't get all users " + e);
         }
-        return Collections.emptyList();
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user) throws DataProcessingException {
         String query = String.format("UPDATE %s SET name =?, surname =?," +
                 " login =?, password =?, token =? WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -167,24 +164,23 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             statement.executeUpdate();
             return user;
         } catch (SQLException e) {
-            logger.warn("Can't update user with id ", e);
+            throw new DataProcessingException("Can't update user " + e);
         }
-        return null;
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(Long id) throws DataProcessingException {
         return delete(get(id).get());
     }
 
     @Override
-    public boolean delete(User user) {
+    public boolean delete(User user) throws DataProcessingException {
         String query = String.format("DELETE FROM %s WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, user.getUserId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            logger.warn("Can't delete user", e);
+            throw new DataProcessingException("Can't delete user by id " + e);
         }
         return false;
     }
