@@ -69,3 +69,6 @@ CREATE TABLE `users_roles` (
   CONSTRAINT `users_roles_roles_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `users_roles_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `internetshop`.`users`
+ADD COLUMN `salt` VARCHAR(90) NOT NULL AFTER `token`;

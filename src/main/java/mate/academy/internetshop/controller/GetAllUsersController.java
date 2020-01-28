@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GetAllUsersController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static Logger logger = Logger.getLogger(GetAllUsersController.class);
     @Inject
     private static UserService userService;
 

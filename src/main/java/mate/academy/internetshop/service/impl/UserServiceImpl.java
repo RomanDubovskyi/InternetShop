@@ -7,6 +7,7 @@ import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import mate.academy.internetshop.util.HashUtil;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -59,11 +60,14 @@ public class UserServiceImpl implements UserService {
     public User login(String login, String password)
             throws AuthenticationException, DataProcessingException {
        Optional<User> user = userDao.findByLogin(login);
-       if (user.isEmpty() || !user.get().getPassword().equals(password)) {
+       if (user.isEmpty() || !HashUtil.hashPassword(
+               password, user.get().getSalt()).equals(user.get().getPassword())) {
            throw new AuthenticationException("Login or password is incorrect!");
        }
        return user.get();
     }
+
+
 
     @Override
     public Optional<User> getByToken(String token) throws DataProcessingException {

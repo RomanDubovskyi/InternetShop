@@ -5,6 +5,7 @@ import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
+import mate.academy.internetshop.util.HashUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,15 +29,18 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public User create(User user) throws DataProcessingException {
         String query = String.format(
-                "INSERT INTO %s (name, surname, login, password, token) VALUES(?, ?, ?, ?, ?);",
-                TABLE_USERS);
+                "INSERT INTO %s (name, surname, login, password, token, salt)"
+                        + " VALUES(?, ?, ?, ?, ?, ?);", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(
                 query, Statement.RETURN_GENERATED_KEYS)) {
+            byte[] salt = HashUtil.getSalt();
+            String password = HashUtil.hashPassword(user.getPassword(), salt);
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getLogin());
-            statement.setString(4, user.getPassword());
+            statement.setString(4, password);
             statement.setString(5, user.getToken());
+            statement.setBytes(6, salt);
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
             while (rs.next()) {
@@ -88,6 +92,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         user.setPassword(rs.getString("password"));
         user.setToken(rs.getString("token"));
         user.addRole(Role.of(rs.getString("role_name")));
+        user.setSalt(rs.getBytes("salt"));
     }
 
     @Override
@@ -136,7 +141,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     public List<User> getAll() throws DataProcessingException {
         List<User> users = new ArrayList<>();
         String query = String.format(
-                "SELECT * FROM %s;", TABLE_USERS);
+                "SELECT * FROM %s JOIN users_roles ON users.user_id = users_roles.user_id "
+                        + "JOIN roles ON users_roles.role_id = roles.role_id;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -153,14 +159,15 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public User update(User user) throws DataProcessingException {
         String query = String.format("UPDATE %s SET name =?, surname =?," +
-                " login =?, password =?, token =? WHERE user_id =?;", TABLE_USERS);
+                " login =?, password =?, token =?, salt =? WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getLogin());
             statement.setString(4, user.getPassword());
             statement.setString(5, user.getToken());
-            statement.setLong(6, user.getUserId());
+            statement.setBytes(6, user.getSalt());
+            statement.setLong(7, user.getUserId());
             statement.executeUpdate();
             return user;
         } catch (SQLException e) {

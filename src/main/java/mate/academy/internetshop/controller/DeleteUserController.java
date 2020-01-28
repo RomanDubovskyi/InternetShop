@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DeleteUserController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static Logger logger = Logger.getLogger(DeleteUserController.class);
     @Inject
     private static UserService userService;
 
