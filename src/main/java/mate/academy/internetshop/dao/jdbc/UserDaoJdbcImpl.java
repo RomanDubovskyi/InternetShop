@@ -33,14 +33,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                         + " VALUES(?, ?, ?, ?, ?, ?);", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(
                 query, Statement.RETURN_GENERATED_KEYS)) {
-            byte[] salt = HashUtil.getSalt();
-            String password = HashUtil.hashPassword(user.getPassword(), salt);
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());
             statement.setString(3, user.getLogin());
-            statement.setString(4, password);
+            statement.setString(4, user.getPassword());
             statement.setString(5, user.getToken());
-            statement.setBytes(6, salt);
+            statement.setBytes(6, user.getSalt());
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
             while (rs.next()) {
