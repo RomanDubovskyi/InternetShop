@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GetAllItemsController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static Logger logger = Logger.getLogger(GetAllItemsController.class);
     @Inject
     private static ItemService itemService;
 

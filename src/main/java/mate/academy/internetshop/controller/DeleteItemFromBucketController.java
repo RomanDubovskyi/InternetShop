@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DeleteItemFromBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static Logger logger = Logger.getLogger(DeleteItemFromBucketController.class);
     @Inject
     private static BucketService bucketService;
     @Inject

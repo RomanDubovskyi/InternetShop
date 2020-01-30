@@ -1,9 +1,12 @@
 package mate.academy.internetshop.web.filters;
 
 import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.controller.AddItemController;
+import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 import static mate.academy.internetshop.model.Role.RoleName.ADMIN;
 import static mate.academy.internetshop.model.Role.RoleName.USER;
@@ -21,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AuthorizationFilter implements Filter {
+    private static Logger logger = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrlsAdmin = new HashMap<>();
@@ -52,7 +56,14 @@ public class AuthorizationFilter implements Filter {
             return;
         }
         Long userId = (Long) req.getSession().getAttribute("user_id");
-        User user = userService.get(userId);
+        User user = null;
+        try {
+            user = userService.get(userId);
+        } catch (DataProcessingException e) {
+            logger.error(e);
+            req.setAttribute("error_massage", e);
+            req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
+        }
         if (verifyRole(user, roleNameAdmin) || verifyRole(user, roleNameUser)) {
             processAuthorized(chain, req, resp);
         } else {
@@ -76,5 +87,6 @@ public class AuthorizationFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }

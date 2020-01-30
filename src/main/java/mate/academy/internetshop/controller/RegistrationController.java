@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class RegistrationController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static Logger logger = Logger.getLogger(RegistrationController.class);
     @Inject
     private static UserService userService;
     @Inject
