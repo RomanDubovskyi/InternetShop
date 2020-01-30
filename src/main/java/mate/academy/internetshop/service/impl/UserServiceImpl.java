@@ -1,18 +1,18 @@
 package mate.academy.internetshop.service.impl;
 
-import mate.academy.internetshop.dao.UserDao;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
+
 import mate.academy.internetshop.annotations.Inject;
 import mate.academy.internetshop.annotations.Service;
+import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
 import mate.academy.internetshop.util.HashUtil;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
         return UUID.randomUUID().toString();
     }
 
-
     @Override
     public List<User> getAll() throws DataProcessingException {
         return userDao.getAll();
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(Long userId) throws DataProcessingException {
         return userDao.get(userId)
-                .orElseThrow(()-> new NoSuchElementException("User doesn't exist"));
+                .orElseThrow(() -> new NoSuchElementException("User doesn't exist"));
     }
 
     @Override
@@ -61,15 +60,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String login, String password)
             throws AuthenticationException, DataProcessingException {
-       Optional<User> user = userDao.findByLogin(login);
-       if (user.isEmpty() || !HashUtil.hashPassword(
-               password, user.get().getSalt()).equals(user.get().getPassword())) {
-           throw new AuthenticationException("Login or password is incorrect!");
-       }
-       return user.get();
+        Optional<User> user = userDao.findByLogin(login);
+        if (user.isEmpty() || !HashUtil.hashPassword(
+                password, user.get().getSalt()).equals(user.get().getPassword())) {
+            throw new AuthenticationException("Login or password is incorrect!");
+        }
+        return user.get();
     }
-
-
 
     @Override
     public Optional<User> getByToken(String token) throws DataProcessingException {

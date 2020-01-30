@@ -1,12 +1,12 @@
 package mate.academy.internetshop.dao.impl;
 
-import mate.academy.internetshop.dao.BucketDao;
-import mate.academy.internetshop.dao.Storage;
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.model.Bucket;
-
 import java.util.List;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.BucketDao;
+import mate.academy.internetshop.dao.Storage;
+import mate.academy.internetshop.model.Bucket;
 
 @Dao
 public class BucketDaoImpl implements BucketDao {

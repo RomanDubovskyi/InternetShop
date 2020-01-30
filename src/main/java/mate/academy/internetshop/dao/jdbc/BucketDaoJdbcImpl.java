@@ -1,11 +1,5 @@
 package mate.academy.internetshop.dao.jdbc;
 
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.dao.BucketDao;
-import mate.academy.internetshop.exceptions.DataProcessingException;
-import mate.academy.internetshop.model.Bucket;
-import mate.academy.internetshop.model.Item;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.BucketDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
+import mate.academy.internetshop.model.Bucket;
+import mate.academy.internetshop.model.Item;
 
 @Dao
 public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao {
@@ -59,7 +59,6 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
         return getBucketItems(bucket);
     }
 
-
     @Override
     public Optional<Bucket> getByOwnerId(Long ownerId) throws DataProcessingException {
         Bucket bucket = new Bucket();
@@ -98,7 +97,6 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
         deleteBucketItems(bucket);
         return insertToBucketsItems(bucket);
     }
-
 
     @Override
     public boolean deleteById(Long id) throws DataProcessingException {
@@ -140,10 +138,10 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
     }
 
     private Bucket insertToBucketsItems(Bucket bucket) throws DataProcessingException {
-        String queryToBuckets_Items = String.format(
+        String queryToBucketsItems = String.format(
                 "INSERT INTO %s (item_id, bucket_id) VALUES (?, ?);", TABLE_BUCKETS_ITEMS);
         for (Item item : bucket.getItems()) {
-            try (PreparedStatement statement = connection.prepareStatement(queryToBuckets_Items)) {
+            try (PreparedStatement statement = connection.prepareStatement(queryToBucketsItems)) {
                 statement.setLong(1, item.getId());
                 statement.setLong(2, bucket.getBucketId());
                 statement.executeUpdate();

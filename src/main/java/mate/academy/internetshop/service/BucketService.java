@@ -1,10 +1,10 @@
 package mate.academy.internetshop.service;
 
+import java.util.List;
+
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
-
-import java.util.List;
 
 public interface BucketService extends GenericService<Bucket, Long> {
 

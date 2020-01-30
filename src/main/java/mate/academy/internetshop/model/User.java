@@ -38,7 +38,7 @@ public class User {
         this.roles = roles;
     }
 
-    public void addRole (Role role) {
+    public void addRole(Role role) {
         roles.add(role);
     }
 
@@ -98,8 +98,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return userId.equals(user.userId) && name.equals(user.name)
                 && surname.equals(user.surname) && login.equals(user.login)
