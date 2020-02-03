@@ -4,11 +4,11 @@ public class Role {
     private Long id;
     private RoleName roleName;
 
-    public Role() {
+    private Role() {
         this.id = RoleIdGenerator.generateRoleId();
     }
 
-    public Role(RoleName roleName) {
+    private Role(RoleName roleName) {
         this();
         this.roleName = roleName;
     }
