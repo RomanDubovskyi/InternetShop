@@ -1,6 +1,7 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +25,8 @@ public class DeleteItemFromBucketController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long userId = (Long) req.getSession().getAttribute("user_id");
-        Bucket bucket = null;
         try {
-            bucket = bucketService.getByOwnerId(userId);
+            Bucket bucket = bucketService.getByOwnerId(userId);
             String itemId = req.getParameter("item_id");
             bucketService.deleteItem(bucket, itemService.get(Long.valueOf(itemId)));
         } catch (DataProcessingException e) {

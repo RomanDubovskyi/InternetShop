@@ -36,10 +36,6 @@ public class Factory {
         }
     }
 
-    private static BucketDao bucketDao;
-    private static ItemDao itemDao;
-    private static OrderDao orderDao;
-    private static UserDao userDao;
     private static BucketService bucketService;
     private static ItemService itemService;
     private static OrderService orderService;

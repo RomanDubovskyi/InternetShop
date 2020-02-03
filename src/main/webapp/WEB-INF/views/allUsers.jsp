@@ -9,9 +9,8 @@
 <body>
 <h1>All Users Panel </h1>
 <p></p>
-<a href="/internet_shop_war_exploded/registration"/>
+<a href="${pageContext.request.contextPath}/registration"></a>
 <button>ADD USER</button>
-</a>
 <p>Users:</p>
 <table border="1">
     <tr>
@@ -36,9 +35,8 @@
                 <c:out value="${user.surname}"/>
             </td>
             <td>
-                <a href="/internet_shop_war_exploded/servlet/deleteUser?user_id=${user.userId}"/>
+                <a href="${pageContext.request.contextPath}/servlet/deleteUser?user_id=${user.userId}"></a>
                 <button>DELETE</button>
-                </a>
             </td>
         </tr>
     </c:forEach>

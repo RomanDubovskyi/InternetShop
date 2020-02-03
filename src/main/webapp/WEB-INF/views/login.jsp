@@ -5,7 +5,7 @@
 </head>
 <body>
 <div>${error_massage}</div>
-<form action="/internet_shop_war_exploded/login" method="post">
+<form action="${pageContext.request.contextPath}/login" method="post">
     <div class="container">
         <h1>Login</h1>
         <p>Please fill in this form to sign into account.</p>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="container signup">
-        <p>Don't have an account? <a href="/internet_shop_war_exploded/registration">Sign up</a>.</p>
+        <p>Don't have an account? <a href="${pageContext.request.contextPath}/registration">Sign up</a>.</p>
     </div>
 </form>
 </body>

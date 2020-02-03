@@ -4,7 +4,7 @@
     <title>Registration</title>
 </head>
 <body>
-<form action="/internet_shop_war_exploded/registration" method="post">
+<form action="${pageContext.request.contextPath}/registration" method="post">
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="/internet_shop_war_exploded/login">Sign in</a>.</p>
+        <p>Already have an account? <a href="${pageContext.request.contextPath}/login">Sign in</a>.</p>
     </div>
 </form>
 

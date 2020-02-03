@@ -66,11 +66,6 @@ public class BucketServiceImpl implements BucketService {
     }
 
     @Override
-    public List<Item> getAllItems(Bucket bucket) {
-        return bucket.getItems();
-    }
-
-    @Override
     public Bucket getByOwnerId(Long ownerId) throws DataProcessingException {
         return bucketDao.getByOwnerId(ownerId).get();
     }

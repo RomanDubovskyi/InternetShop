@@ -10,18 +10,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mate.academy.internetshop.annotations.Inject;
-import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthenticationFilter implements Filter {
     private static final Logger LOGGER = Logger.getLogger(AuthenticationFilter.class);
-    @Inject
-    private static UserService userService;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

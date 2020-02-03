@@ -114,27 +114,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public Optional<User> findByToken(String token) throws DataProcessingException {
-        User user = new User();
-        user.setToken(token);
-        String query = String.format(
-                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s"
-                        + " ON users_roles.role_id = roles.role_id WHERE token =?;",
-                TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, token);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                setUsersFields(rs, user);
-                return Optional.of(user);
-            }
-        } catch (SQLException e) {
-            throw new DataProcessingException("Can't find user by token " + e);
-        }
-        return Optional.empty();
-    }
-
-    @Override
     public List<User> getAll() throws DataProcessingException {
         List<User> users = new ArrayList<>();
         String query = String.format(

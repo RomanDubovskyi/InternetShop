@@ -4,7 +4,7 @@
     <title>Add Item</title>
 </head>
 <body>
-<form action="/internet_shop_war_exploded/servlet/addItem" method="post">
+<form action="${pageContext.request.contextPath}/servlet/addItem" method="post">
     <div class="container">
         <h1>Add Item</h1>
         <p>Please fill in this form to add an Item.</p>

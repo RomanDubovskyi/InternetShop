@@ -6,6 +6,7 @@ import static mate.academy.internetshop.model.Role.RoleName.USER;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,7 +31,7 @@ public class AuthorizationFilter implements Filter {
     private Map<String, Role.RoleName> protectedUrlsUser = new HashMap<>();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         protectedUrlsAdmin.put("/servlet/getAllUsers", ADMIN);
         protectedUrlsAdmin.put("/servlet/addItem", ADMIN);
         protectedUrlsAdmin.put("/servlet/deleteFromItems", ADMIN);

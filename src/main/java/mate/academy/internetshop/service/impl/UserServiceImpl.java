@@ -67,9 +67,4 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-
-    @Override
-    public Optional<User> getByToken(String token) throws DataProcessingException {
-        return userDao.findByToken(token);
-    }
 }

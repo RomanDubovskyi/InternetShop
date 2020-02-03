@@ -25,7 +25,7 @@
                 </c:forEach>
             </td>
             <td>
-                <a href="/internet_shop_war_exploded/servlet/deleteOrder?order_id=${order.orderId}">
+                <a href="${pageContext.request.contextPath}/servlet/deleteOrder?order_id=${order.orderId}">
                     <button>Delete</button>
                 </a>
             </td>
