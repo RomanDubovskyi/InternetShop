@@ -44,6 +44,8 @@ Configure Tomcat:
 
 Add sdk 11.0.3 in project structure.
 
+Main implementation uses MySQL as Database, so in order to setup local DB properly you would need to follow these instructions :
+
 Use file /InternetShop/src/main/resources/init_db.sql to create all the tables required by this app in MySQL database.
 
 At /InternetShop/src/main/java/mate/academy/internetshop/factory/Factory class use username and password for your DB to create a Connection.
@@ -56,6 +58,9 @@ If you first time launch this project:
  * Run InjectDataController by URL = .../internet_shop_war_exploded/InjectDataController to create default users.
 
 After that you will have access to **Admin**(login: "admin", password "admin") and **User**(login: "user", password: "user") accounts.
+
+In case you don't want to install MySQL there is as well implementation of DB that uses Storage Class /InternetShop/src/main/java/mate/academy/internetshop/dao/Storage. 
+In order to user you just need to change dao implementation in Factory class.
 
 <hr>
 
