@@ -16,7 +16,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class InjectDataController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(InjectDataController.class);
+    private static final Logger LOGGER = Logger.getLogger(InjectDataController.class);
     @Inject
     private static UserService userService;
     @Inject
@@ -45,7 +45,7 @@ public class InjectDataController extends HttpServlet {
             admin.setPassword("admin");
             userService.create(admin);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

@@ -13,7 +13,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class AddItemController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(AddItemController.class);
+    private static final Logger LOGGER = Logger.getLogger(AddItemController.class);
     @Inject
     private static ItemService itemService;
 
@@ -32,7 +32,7 @@ public class AddItemController extends HttpServlet {
         try {
             itemService.create(newItem);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

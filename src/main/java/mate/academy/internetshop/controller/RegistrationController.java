@@ -18,7 +18,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class RegistrationController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(RegistrationController.class);
+    private static final Logger LOGGER = Logger.getLogger(RegistrationController.class);
     @Inject
     private static UserService userService;
     @Inject
@@ -50,7 +50,7 @@ public class RegistrationController extends HttpServlet {
             bucket.setOwnerId(newUser.getUserId());
             bucketService.create(bucket);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

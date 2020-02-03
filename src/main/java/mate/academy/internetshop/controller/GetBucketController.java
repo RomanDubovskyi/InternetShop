@@ -12,7 +12,7 @@ import mate.academy.internetshop.service.BucketService;
 import org.apache.log4j.Logger;
 
 public class GetBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(GetBucketController.class);
+    private static final Logger LOGGER = Logger.getLogger(GetBucketController.class);
     @Inject
     private static BucketService bucketService;
 
@@ -24,7 +24,7 @@ public class GetBucketController extends HttpServlet {
         try {
             req.setAttribute("bucket", bucketService.getByOwnerId(userId));
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

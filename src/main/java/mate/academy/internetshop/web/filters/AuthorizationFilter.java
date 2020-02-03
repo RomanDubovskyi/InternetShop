@@ -23,7 +23,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class AuthorizationFilter implements Filter {
-    private static Logger logger = Logger.getLogger(AuthorizationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrlsAdmin = new HashMap<>();
@@ -59,7 +59,7 @@ public class AuthorizationFilter implements Filter {
         try {
             user = userService.get(userId);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

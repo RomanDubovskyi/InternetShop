@@ -14,7 +14,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class GetAllOrdersController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(GetAllOrdersController.class);
+    private static final Logger LOGGER = Logger.getLogger(GetAllOrdersController.class);
     @Inject
     private static OrderService orderService;
 
@@ -30,7 +30,7 @@ public class GetAllOrdersController extends HttpServlet {
             user = userService.get(userId);
             req.setAttribute("orders", orderService.getUserOrders(user));
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

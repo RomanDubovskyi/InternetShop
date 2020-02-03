@@ -14,7 +14,7 @@ import mate.academy.internetshop.service.ItemService;
 import org.apache.log4j.Logger;
 
 public class DeleteItemFromBucketController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(DeleteItemFromBucketController.class);
+    private static final Logger LOGGER = Logger.getLogger(DeleteItemFromBucketController.class);
     @Inject
     private static BucketService bucketService;
     @Inject
@@ -30,7 +30,7 @@ public class DeleteItemFromBucketController extends HttpServlet {
             String itemId = req.getParameter("item_id");
             bucketService.deleteItem(bucket, itemService.get(Long.valueOf(itemId)));
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

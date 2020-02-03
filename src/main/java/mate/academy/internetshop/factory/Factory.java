@@ -23,7 +23,7 @@ import mate.academy.internetshop.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 public class Factory {
-    private static Logger logger = Logger.getLogger(Factory.class);
+    private static final Logger LOGGER = Logger.getLogger(Factory.class);
     private static Connection connection;
 
     static {
@@ -32,7 +32,7 @@ public class Factory {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/internetshop?"
                     + "user=root&password=roman&serverTimezone=UTC");
         } catch (ClassNotFoundException | SQLException e) {
-            logger.error("Can't establish connection to our DB", e);
+            LOGGER.error("Can't establish connection to our DB", e);
         }
     }
 

@@ -15,7 +15,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class LoginController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(LoginController.class);
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class);
     @Inject
     private static UserService userService;
 
@@ -39,7 +39,7 @@ public class LoginController extends HttpServlet {
             req.setAttribute("error_massage", "Incorrect login or password!");
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }

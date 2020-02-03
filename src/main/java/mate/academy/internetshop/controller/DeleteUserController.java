@@ -12,7 +12,7 @@ import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
 public class DeleteUserController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(DeleteUserController.class);
+    private static final Logger LOGGER = Logger.getLogger(DeleteUserController.class);
     @Inject
     private static UserService userService;
 
@@ -23,7 +23,7 @@ public class DeleteUserController extends HttpServlet {
         try {
             userService.deleteById(Long.valueOf(userId));
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }
