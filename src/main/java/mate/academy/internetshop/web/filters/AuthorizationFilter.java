@@ -1,15 +1,11 @@
 package mate.academy.internetshop.web.filters;
 
-import mate.academy.internetshop.annotations.Inject;
-import mate.academy.internetshop.controller.AddItemController;
-import mate.academy.internetshop.exceptions.DataProcessingException;
-import mate.academy.internetshop.model.Role;
-import mate.academy.internetshop.model.User;
-import mate.academy.internetshop.service.UserService;
-import org.apache.log4j.Logger;
-
 import static mate.academy.internetshop.model.Role.RoleName.ADMIN;
 import static mate.academy.internetshop.model.Role.RoleName.USER;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -19,19 +15,23 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
+import mate.academy.internetshop.annotations.Inject;
+import mate.academy.internetshop.exceptions.DataProcessingException;
+import mate.academy.internetshop.model.Role;
+import mate.academy.internetshop.model.User;
+import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 public class AuthorizationFilter implements Filter {
-    private static Logger logger = Logger.getLogger(AuthorizationFilter.class);
+    private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
     @Inject
     private static UserService userService;
     private Map<String, Role.RoleName> protectedUrlsAdmin = new HashMap<>();
     private Map<String, Role.RoleName> protectedUrlsUser = new HashMap<>();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         protectedUrlsAdmin.put("/servlet/getAllUsers", ADMIN);
         protectedUrlsAdmin.put("/servlet/addItem", ADMIN);
         protectedUrlsAdmin.put("/servlet/deleteFromItems", ADMIN);
@@ -60,7 +60,7 @@ public class AuthorizationFilter implements Filter {
         try {
             user = userService.get(userId);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }
@@ -72,8 +72,8 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean verifyRole(User user, Role.RoleName roleName) {
-        return user.getRoles().stream().
-                anyMatch(r -> r.getRoleName().equals(roleName));
+        return user.getRoles().stream()
+                .anyMatch(r -> r.getRoleName().equals(roleName));
     }
 
     private void processDenied(HttpServletRequest req, HttpServletResponse resp)

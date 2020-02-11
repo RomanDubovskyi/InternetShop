@@ -25,7 +25,7 @@
                 </c:forEach>
             </td>
             <td>
-                <a href="/internet_shop_war_exploded/servlet/deleteOrder?order_id=${order.orderId}">
+                <a href="${pageContext.request.contextPath}/servlet/deleteOrder?order_id=${order.orderId}">
                     <button>Delete</button>
                 </a>
             </td>
@@ -33,7 +33,7 @@
     </c:forEach>
 </table>
 <p>
-    <button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu</button>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/mainMenu'" type="button">Back to menu</button>
 </p>
 </body>
 </html>

@@ -34,7 +34,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>menu</servlet-name>
-        <url-pattern>/servlet/main_menu</url-pattern>
+        <url-pattern>/servlet/mainMenu</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>getAllItems</servlet-name>

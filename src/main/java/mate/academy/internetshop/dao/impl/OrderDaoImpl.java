@@ -1,12 +1,12 @@
 package mate.academy.internetshop.dao.impl;
 
-import mate.academy.internetshop.dao.OrderDao;
-import mate.academy.internetshop.dao.Storage;
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.model.Order;
-
 import java.util.List;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.OrderDao;
+import mate.academy.internetshop.dao.Storage;
+import mate.academy.internetshop.model.Order;
 
 @Dao
 public class OrderDaoImpl implements OrderDao {

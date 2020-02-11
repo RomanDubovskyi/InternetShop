@@ -1,11 +1,5 @@
 package mate.academy.internetshop.dao.jdbc;
 
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.dao.OrderDao;
-import mate.academy.internetshop.exceptions.DataProcessingException;
-import mate.academy.internetshop.model.Item;
-import mate.academy.internetshop.model.Order;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.OrderDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
+import mate.academy.internetshop.model.Item;
+import mate.academy.internetshop.model.Order;
 
 @Dao
 public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
@@ -105,10 +105,10 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private Order insertToOrderItems(Order order) throws DataProcessingException {
-        String ItemsToOrderQuery = String.format(
+        String itemsToOrderQuery = String.format(
                 "INSERT INTO %s (item_id, order_id) VALUES (?, ?);", TABLE_ORDERS_ITEMS);
         for (Item item : order.getItems()) {
-            try (PreparedStatement statement = connection.prepareStatement(ItemsToOrderQuery)) {
+            try (PreparedStatement statement = connection.prepareStatement(itemsToOrderQuery)) {
                 statement.setLong(1, item.getId());
                 statement.setLong(2, order.getOrderId());
                 statement.executeUpdate();
@@ -121,8 +121,8 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
 
     private Optional<Order> getOrderItems(Order order) throws DataProcessingException {
         String getItemsQuery = String.format(
-                "SELECT * FROM %s JOIN %s ON orders.order_id = orders_items.order_id join %s ON" +
-                        " orders_items.item_id = items.item_id WHERE orders.order_id = ?;",
+                "SELECT * FROM %s JOIN %s ON orders.order_id = orders_items.order_id join %s ON"
+                        + " orders_items.item_id = items.item_id WHERE orders.order_id = ?;",
                 TABLE_ORDERS, TABLE_ORDERS_ITEMS, TABLE_ITEMS);
         try (PreparedStatement statement = connection.prepareStatement(getItemsQuery)) {
             statement.setLong(1, order.getOrderId());

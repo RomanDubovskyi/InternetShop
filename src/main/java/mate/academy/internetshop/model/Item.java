@@ -33,13 +33,17 @@ public class Item {
 
     @Override
     public String toString() {
-        return  name + "\n" + "Price: " + price + "$";
+        return name + "\n" + "Price: " + price + "$";
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)  {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Item item = (Item) o;
         return id.equals(item.id)
                 && name.equals(item.name)

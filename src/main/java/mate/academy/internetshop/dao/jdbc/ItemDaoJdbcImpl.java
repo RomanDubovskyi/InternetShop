@@ -1,10 +1,5 @@
 package mate.academy.internetshop.dao.jdbc;
 
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.dao.ItemDao;
-import mate.academy.internetshop.exceptions.DataProcessingException;
-import mate.academy.internetshop.model.Item;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.ItemDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
+import mate.academy.internetshop.model.Item;
 
 @Dao
 public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {

@@ -1,5 +1,13 @@
 package mate.academy.internetshop.annotations;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 import mate.academy.internetshop.controller.InjectInitializer;
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.ItemDao;
@@ -10,15 +18,6 @@ import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
 import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 
 public class Injector {
     private static final String PROJECT_MAIN_PACKAGE = "mate.academy.internetshop";

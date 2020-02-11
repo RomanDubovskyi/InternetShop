@@ -4,7 +4,7 @@
     <title>Add Item</title>
 </head>
 <body>
-<form action="/internet_shop_war_exploded/servlet/addItem" method="post">
+<form action="${pageContext.request.contextPath}/servlet/addItem" method="post">
     <div class="container">
         <h1>Add Item</h1>
         <p>Please fill in this form to add an Item.</p>
@@ -19,7 +19,7 @@
         <hr>
         <button type="submit">Add</button>
         <p>
-            <button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu
+            <button onclick="location.href='/internet_shop_war_exploded/servlet/mainMenu'" type="button">Back to menu
             </button>
         </p>
         <p>

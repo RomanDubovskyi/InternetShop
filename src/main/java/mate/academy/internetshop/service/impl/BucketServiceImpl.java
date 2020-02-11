@@ -1,15 +1,15 @@
 package mate.academy.internetshop.service.impl;
 
-import mate.academy.internetshop.dao.BucketDao;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import mate.academy.internetshop.annotations.Inject;
 import mate.academy.internetshop.annotations.Service;
+import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.BucketService;
-
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class BucketServiceImpl implements BucketService {
@@ -63,11 +63,6 @@ public class BucketServiceImpl implements BucketService {
     public void clear(Bucket bucket) throws DataProcessingException {
         bucket.getItems().clear();
         update(bucket);
-    }
-
-    @Override
-    public List<Item> getAllItems(Bucket bucket) {
-        return bucket.getItems();
     }
 
     @Override

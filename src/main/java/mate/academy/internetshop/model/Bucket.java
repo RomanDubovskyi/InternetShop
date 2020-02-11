@@ -9,11 +9,11 @@ public class Bucket {
     private Long bucketId;
     private Long ownerId;
 
-    public Bucket(){
+    public Bucket() {
         items = new ArrayList<>();
     }
 
-    public Bucket(Long ownerId){
+    public Bucket(Long ownerId) {
         this.ownerId = ownerId;
         items = new ArrayList<>();
     }
@@ -44,11 +44,15 @@ public class Bucket {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Bucket bucket = (Bucket) o;
-        return bucketId.equals(bucket.bucketId) &&
-                ownerId.equals(bucket.ownerId);
+        return bucketId.equals(bucket.bucketId)
+                && ownerId.equals(bucket.ownerId);
     }
 
     @Override

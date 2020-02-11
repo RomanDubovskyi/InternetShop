@@ -1,12 +1,5 @@
 package mate.academy.internetshop.dao.jdbc;
 
-import mate.academy.internetshop.annotations.Dao;
-import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.exceptions.DataProcessingException;
-import mate.academy.internetshop.model.Role;
-import mate.academy.internetshop.model.User;
-import mate.academy.internetshop.util.HashUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import mate.academy.internetshop.annotations.Dao;
+import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.exceptions.DataProcessingException;
+import mate.academy.internetshop.model.Role;
+import mate.academy.internetshop.model.User;
 
 @Dao
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
@@ -48,8 +47,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             throw new DataProcessingException("Can't create user " + e);
         }
         String setRoleQuery = String.format(
-                "INSERT INTO %s (user_id, role_id) VALUES(" +
-                        "?, (SELECT role_id FROM %s WHERE role_name = ?))",
+                "INSERT INTO %s (user_id, role_id) VALUES("
+                        + "?, (SELECT role_id FROM %s WHERE role_name = ?))",
                 TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(setRoleQuery)) {
             statement.setLong(1, user.getUserId());
@@ -66,8 +65,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         user.setUserId(id);
         String query = String.format(
-                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s" +
-                        " ON users_roles.role_id = roles.role_id WHERE users.user_id =?",
+                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s"
+                        + " ON users_roles.role_id = roles.role_id WHERE users.user_id =?",
                 TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, user.getUserId());
@@ -98,8 +97,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         user.setLogin(login);
         String query = String.format(
-                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s " +
-                        "ON users_roles.role_id = roles.role_id WHERE login =?",
+                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s "
+                        + "ON users_roles.role_id = roles.role_id WHERE login =?",
                 TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);
@@ -110,27 +109,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             }
         } catch (SQLException e) {
             throw new DataProcessingException("Can't find user by login " + e);
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<User> findByToken(String token) throws DataProcessingException {
-        User user = new User();
-        user.setToken(token);
-        String query = String.format(
-                "SELECT * FROM %s JOIN %s ON users.user_id = users_roles.user_id JOIN %s"
-                        + " ON users_roles.role_id = roles.role_id WHERE token =?;",
-                TABLE_USERS, TABLE_USERS_ROLES, TABLE_ROLES);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, token);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                setUsersFields(rs, user);
-                return Optional.of(user);
-            }
-        } catch (SQLException e) {
-            throw new DataProcessingException("Can't find user by token " + e);
         }
         return Optional.empty();
     }
@@ -156,8 +134,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public User update(User user) throws DataProcessingException {
-        String query = String.format("UPDATE %s SET name =?, surname =?," +
-                " login =?, password =?, token =?, salt =? WHERE user_id =?;", TABLE_USERS);
+        String query = String.format("UPDATE %s SET name =?, surname =?,"
+                + " login =?, password =?, token =?, salt =? WHERE user_id =?;", TABLE_USERS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getSurname());

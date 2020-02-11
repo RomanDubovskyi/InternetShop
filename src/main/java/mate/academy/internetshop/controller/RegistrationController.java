@@ -1,5 +1,13 @@
 package mate.academy.internetshop.controller;
 
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import mate.academy.internetshop.annotations.Inject;
 import mate.academy.internetshop.exceptions.DataProcessingException;
 import mate.academy.internetshop.model.Bucket;
@@ -9,16 +17,8 @@ import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-
 public class RegistrationController extends HttpServlet {
-    private static Logger logger = Logger.getLogger(RegistrationController.class);
+    private static final Logger LOGGER = Logger.getLogger(RegistrationController.class);
     @Inject
     private static UserService userService;
     @Inject
@@ -50,10 +50,10 @@ public class RegistrationController extends HttpServlet {
             bucket.setOwnerId(newUser.getUserId());
             bucketService.create(bucket);
         } catch (DataProcessingException e) {
-            logger.error(e);
+            LOGGER.error(e);
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }
-        resp.sendRedirect(req.getContextPath() + "/servlet/main_menu");
+        resp.sendRedirect(req.getContextPath() + "/servlet/mainMenu");
     }
 }
