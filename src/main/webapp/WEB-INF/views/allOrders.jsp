@@ -33,7 +33,7 @@
     </c:forEach>
 </table>
 <p>
-    <button onclick="location.href='/internet_shop_war_exploded/servlet/main_menu'" type="button">Back to menu</button>
+    <button onclick="location.href='/internet_shop_war_exploded/servlet/mainMenu'" type="button">Back to menu</button>
 </p>
 </body>
 </html>

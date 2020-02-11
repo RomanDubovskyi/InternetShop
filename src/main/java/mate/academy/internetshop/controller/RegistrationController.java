@@ -54,6 +54,6 @@ public class RegistrationController extends HttpServlet {
             req.setAttribute("error_massage", e);
             req.getRequestDispatcher("/WEB-INF/views/daraProcessingError.jsp").forward(req, resp);
         }
-        resp.sendRedirect(req.getContextPath() + "/servlet/main_menu");
+        resp.sendRedirect(req.getContextPath() + "/servlet/mainMenu");
     }
 }
