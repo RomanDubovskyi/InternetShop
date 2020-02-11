@@ -64,5 +64,5 @@ In order to user you just need to change dao implementation in Factory class.
 
 <hr>
 
-#Author
+# Author
 [Roman Dubovskyi](https://github.com/RomanDubovskyi)
